@@ -1,19 +1,21 @@
 ### deposit money to account
-POST http://localhost:8080/api/v1/transactions/DE23120300001234123412/deposit
+POST http://localhost:8080/api/v1/transactions/deposit
 Content-Type: application/json
 
 {
+  "iban": "DE23120300001234123412",
   "currency": "EUR",
   "amount": "2000"
 }
 
 ### withdraw money from checking account
-POST http://localhost:8080/api/v1/transactions/DE23120300001234123412/withdraw
+POST http://localhost:8080/api/v1/transactions/withdraw
 Content-Type: application/json
 
 {
+  "iban": "DE23120300001234123412",
   "currency": "EUR",
-  "amount": "10.10"
+  "amount": "100.10"
 }
 
 ### transfer money
@@ -22,7 +24,7 @@ Content-Type: application/json
 
 {
   "receivingIban": "DE73120300001234123433",
-  "sendingIban": "DE11120300001234123400",
+  "sendingIban": "DE23120300001234123412",
   "currency": "EUR",
   "amount": "10.10"
 }
@@ -32,10 +34,10 @@ POST http://localhost:8080/api/v1/transactions/transfer
 Content-Type: application/json
 
 {
-  "receivingIban": "DE11120300001234123400",
+  "receivingIban": "DE23120300001234123412",
   "sendingIban": "DE73120300001234123433",
   "currency": "EUR",
-  "amount": "10.10"
+  "amount": "15.10"
 }
 
 

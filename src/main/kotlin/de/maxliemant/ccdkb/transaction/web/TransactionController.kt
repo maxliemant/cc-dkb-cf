@@ -15,23 +15,21 @@ class TransactionController(
     fun getTransactionsForIban(@PathVariable("iban") iban: String): ResponseWrapper<Collection<Transaction>> =
             ResponseWrapper.of(transactionService.findTransactions(iban))
 
-    @PostMapping("/{iban}/deposit")
-    fun depositMoney(@PathVariable("iban") iban: String,
-                     @RequestBody transaction: TransactionDto): ResponseWrapper<Transaction> {
-        val deposit = transaction.toDeposit(iban)
+    @PostMapping("/deposit")
+    fun depositMoney(@RequestBody transaction: DepositDto): ResponseWrapper<Transaction> {
+        val deposit = transaction.toTransaction()
         return ResponseWrapper.of(transactionService.depositMoney(deposit))
     }
 
-    @PostMapping("/{iban}/withdraw")
-    fun withdrawMoney(@PathVariable("iban") iban: String,
-                     @RequestBody transaction: TransactionDto): ResponseWrapper<Transaction> {
-        val withdraw = transaction.toWithdraw(iban)
+    @PostMapping("/withdraw")
+    fun withdrawMoney(@RequestBody transaction: WithdrawDto): ResponseWrapper<Transaction> {
+        val withdraw = transaction.toTransaction()
         return ResponseWrapper.of(transactionService.withdrawMoney(withdraw))
     }
 
     @PostMapping("transfer")
-    fun transferMoney(@RequestBody transaction: TransactionDto): ResponseWrapper<Transaction> {
-        val transfer = transaction.toTransfer()
+    fun transferMoney(@RequestBody transaction: TransferDto): ResponseWrapper<Transaction> {
+        val transfer = transaction.toTransaction()
         return ResponseWrapper.of(transactionService.transferMoney(transfer))
     }
 }

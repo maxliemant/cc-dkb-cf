@@ -7,28 +7,13 @@ import java.math.BigDecimal
 
 
 data class DepositDto(
-        val receivingIban: String,
-        val amount: String,
-        val currency: String,
-)
-
-data class WithdrawDto(
-        val sendingIban: String,
-        val amount: String,
-        val currency: String,
-)
-
-data class TransactionDto(
-        val receivingIban: String?,
-        val sendingIban: String?,
+        val iban: String,
         val amount: String,
         val currency: String,
 ) {
-    fun toDeposit(iban: String): Transaction {
+    fun toTransaction(): Transaction {
         val depositAmount = BigDecimal(amount)
-        if(depositAmount <= BigDecimal.ZERO){
-            throw BadRequestException("cannot deposit a zero or negative amount")
-        }
+        checkAmountNotNegativeOrZero(depositAmount)
         return Transaction(
                 receivingIban = iban,
                 currency = currency,
@@ -36,12 +21,16 @@ data class TransactionDto(
                 transactionType = TransactionType.DEPOSIT
         )
     }
+}
 
-    fun toWithdraw(iban: String): Transaction {
+data class WithdrawDto(
+        val iban: String,
+        val amount: String,
+        val currency: String,
+) {
+    fun toTransaction(): Transaction {
         val withdrawAmount = BigDecimal(amount)
-        if(withdrawAmount <= BigDecimal.ZERO){
-            throw BadRequestException("cannot withdraw a zero or negative amount")
-        }
+        checkAmountNotNegativeOrZero(withdrawAmount)
         return Transaction(
                 sendingIban = iban,
                 currency = currency,
@@ -49,12 +38,18 @@ data class TransactionDto(
                 transactionType = TransactionType.WITHDRAW
         )
     }
+}
 
-    fun toTransfer(): Transaction {
+data class TransferDto(
+        val receivingIban: String?,
+        val sendingIban: String?,
+        val amount: String,
+        val currency: String,
+) {
+
+    fun toTransaction(): Transaction {
         val transferAmount = BigDecimal(amount)
-        if(transferAmount <= BigDecimal.ZERO){
-            throw BadRequestException("cannot transfer a zero or negative amount")
-        }
+        checkAmountNotNegativeOrZero(transferAmount)
         return Transaction(
                 receivingIban = receivingIban,
                 sendingIban = sendingIban,
@@ -63,5 +58,11 @@ data class TransactionDto(
                 transactionType = TransactionType.TRANSFER
         )
     }
+
 }
 
+fun checkAmountNotNegativeOrZero(transferAmount: BigDecimal) {
+    if (transferAmount <= BigDecimal.ZERO) {
+        throw BadRequestException("cannot transfer a zero or negative amount")
+    }
+}
