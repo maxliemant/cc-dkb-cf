@@ -1,6 +1,3 @@
-GET http://localhost:8080/api/v1/transactions/DE23120300001234123412
-Accept: application/json
-
 ### deposit money to account
 POST http://localhost:8080/api/v1/transactions/DE23120300001234123412/deposit
 Content-Type: application/json
@@ -15,7 +12,34 @@ POST http://localhost:8080/api/v1/transactions/DE23120300001234123412/withdraw
 Content-Type: application/json
 
 {
-"currency": "EUR",
-"amount": "10.10"
+  "currency": "EUR",
+  "amount": "-10.10"
 }
-###
+
+### transfer money
+POST http://localhost:8080/api/v1/transactions/transfer
+Content-Type: application/json
+
+{
+  "receivingIban": "DE73120300001234123433",
+  "sendingIban": "DE23120300001234123412",
+  "currency": "EUR",
+  "amount": "10.10"
+}
+
+### transfer money from saving account
+POST http://localhost:8080/api/v1/transactions/transfer
+Content-Type: application/json
+
+{
+  "receivingIban": "DE23120300001234123412",
+  "sendingIban": "DE73120300001234123433",
+  "currency": "EUR",
+  "amount": "10.10"
+}
+
+
+### get all transactions for account
+GET http://localhost:8080/api/v1/transactions/DE23120300001234123412
+Accept: application/json
+

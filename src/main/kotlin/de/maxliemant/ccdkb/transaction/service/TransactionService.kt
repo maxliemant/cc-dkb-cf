@@ -26,7 +26,7 @@ class TransactionService(val transactionRepository: TransactionRepository,
 
     @Transactional
     fun withdrawMoney(withdraw: Transaction): Transaction {
-        val account = accountService.getAccount(withdraw.receivingIban!!)
+        val account = accountService.getAccount(withdraw.sendingIban!!)
         if(!account.accountType.withdrawable){
             throw BadRequestException("account is not allowed for withdrawing money")
         }

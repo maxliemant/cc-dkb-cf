@@ -11,7 +11,8 @@ class TransactionController(
 ) {
 
     @GetMapping("/{iban}")
-    fun getTransactionsForIban(@PathVariable("iban") iban: String): Collection<Transaction> = transactionService.findTransactions(iban)
+    fun getTransactionsForIban(@PathVariable("iban") iban: String): Collection<Transaction> =
+            transactionService.findTransactions(iban)
 
     @PostMapping("/{iban}/deposit")
     fun depositMoney(@PathVariable("iban") iban: String,
@@ -22,14 +23,14 @@ class TransactionController(
 
     @PostMapping("/{iban}/withdraw")
     fun withdrawMoney(@PathVariable("iban") iban: String,
-                     @RequestBody transaction: TransactionDto) {
+                     @RequestBody transaction: TransactionDto): Transaction {
         val withdraw = transaction.toWithdraw(iban)
-        transactionService.withdrawMoney(withdraw)
+        return transactionService.withdrawMoney(withdraw)
     }
 
     @PostMapping("transfer")
-    fun transferMoney(@RequestBody transaction: TransactionDto) {
+    fun transferMoney(@RequestBody transaction: TransactionDto): Transaction {
         val transfer = transaction.toTransfer()
-        transactionService.transferMoney(transfer)
+        return transactionService.transferMoney(transfer)
     }
 }

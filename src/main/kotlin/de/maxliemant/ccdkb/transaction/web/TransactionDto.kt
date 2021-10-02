@@ -47,7 +47,7 @@ data class TransactionDto(
                 sendingIban = sendingIban,
                 currency = currency,
                 amount = transferAmount,
-                transactionType = TransactionType.DEPOSIT
+                transactionType = TransactionType.TRANSFER
         )
     }
 }
