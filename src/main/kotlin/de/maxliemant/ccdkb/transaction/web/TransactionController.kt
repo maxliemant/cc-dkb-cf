@@ -1,5 +1,6 @@
 package de.maxliemant.ccdkb.transaction.web
 
+import de.maxliemant.ccdkb.common.ResponseWrapper
 import de.maxliemant.ccdkb.transaction.model.Transaction
 import de.maxliemant.ccdkb.transaction.service.TransactionService
 import org.springframework.web.bind.annotation.*
@@ -11,26 +12,26 @@ class TransactionController(
 ) {
 
     @GetMapping("/{iban}")
-    fun getTransactionsForIban(@PathVariable("iban") iban: String): Collection<Transaction> =
-            transactionService.findTransactions(iban)
+    fun getTransactionsForIban(@PathVariable("iban") iban: String): ResponseWrapper<Collection<Transaction>> =
+            ResponseWrapper.of(transactionService.findTransactions(iban))
 
     @PostMapping("/{iban}/deposit")
     fun depositMoney(@PathVariable("iban") iban: String,
-                     @RequestBody transaction: TransactionDto): Transaction {
+                     @RequestBody transaction: TransactionDto): ResponseWrapper<Transaction> {
         val deposit = transaction.toDeposit(iban)
-        return transactionService.depositMoney(deposit)
+        return ResponseWrapper.of(transactionService.depositMoney(deposit))
     }
 
     @PostMapping("/{iban}/withdraw")
     fun withdrawMoney(@PathVariable("iban") iban: String,
-                     @RequestBody transaction: TransactionDto): Transaction {
+                     @RequestBody transaction: TransactionDto): ResponseWrapper<Transaction> {
         val withdraw = transaction.toWithdraw(iban)
-        return transactionService.withdrawMoney(withdraw)
+        return ResponseWrapper.of(transactionService.withdrawMoney(withdraw))
     }
 
     @PostMapping("transfer")
-    fun transferMoney(@RequestBody transaction: TransactionDto): Transaction {
+    fun transferMoney(@RequestBody transaction: TransactionDto): ResponseWrapper<Transaction> {
         val transfer = transaction.toTransfer()
-        return transactionService.transferMoney(transfer)
+        return ResponseWrapper.of(transactionService.transferMoney(transfer))
     }
 }

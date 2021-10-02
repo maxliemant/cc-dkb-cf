@@ -5,6 +5,19 @@ import de.maxliemant.ccdkb.transaction.model.Transaction
 import de.maxliemant.ccdkb.transaction.model.TransactionType
 import java.math.BigDecimal
 
+
+data class DepositDto(
+        val receivingIban: String,
+        val amount: String,
+        val currency: String,
+)
+
+data class WithdrawDto(
+        val sendingIban: String,
+        val amount: String,
+        val currency: String,
+)
+
 data class TransactionDto(
         val receivingIban: String?,
         val sendingIban: String?,
@@ -26,8 +39,8 @@ data class TransactionDto(
 
     fun toWithdraw(iban: String): Transaction {
         val withdrawAmount = BigDecimal(amount)
-        if(withdrawAmount >= BigDecimal.ZERO){
-            throw BadRequestException("cannot withdraw a positive amount")
+        if(withdrawAmount <= BigDecimal.ZERO){
+            throw BadRequestException("cannot withdraw a zero or negative amount")
         }
         return Transaction(
                 sendingIban = iban,
@@ -40,7 +53,7 @@ data class TransactionDto(
     fun toTransfer(): Transaction {
         val transferAmount = BigDecimal(amount)
         if(transferAmount <= BigDecimal.ZERO){
-            throw BadRequestException("cannot transfer a negative amount")
+            throw BadRequestException("cannot transfer a zero or negative amount")
         }
         return Transaction(
                 receivingIban = receivingIban,

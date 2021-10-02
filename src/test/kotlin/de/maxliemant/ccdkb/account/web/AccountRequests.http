@@ -21,3 +21,11 @@ Accept: application/json
 ### get account by iban
 GET http://localhost:8080/api/v1/accounts/DE23120300001234123412
 Accept: application/json
+
+### lock account
+PUT http://localhost:8080/api/v1/accounts/DE23120300001234123412/lock
+Accept: application/json
+
+### unlock account
+PUT http://localhost:8080/api/v1/accounts/DE23120300001234123412/unlock
+Accept: application/json

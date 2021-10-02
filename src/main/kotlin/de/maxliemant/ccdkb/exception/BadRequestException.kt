@@ -1,5 +1,5 @@
 package de.maxliemant.ccdkb.exception
 
-open class BadRequestException(message: String?) : RuntimeException(message) {
+open class BadRequestException(message: String) : RuntimeException(message) {
 
 }

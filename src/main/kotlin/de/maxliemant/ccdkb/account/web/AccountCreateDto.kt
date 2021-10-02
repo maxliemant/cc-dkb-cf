@@ -17,6 +17,9 @@ data class AccountCreateDto(
         if(type == AccountType.SAVING && referenceAccount == null){
             throw BadRequestException("'saving' account need a reference account")
         }
+        if(type != AccountType.SAVING && referenceAccount != null){
+            throw BadRequestException("only 'saving' account is allowed to have a reference account")
+        }
         return Account(
                 iban = iban,
                 accountOwner = accountOwner,

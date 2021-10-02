@@ -3,6 +3,7 @@ package de.maxliemant.ccdkb.account.service
 import de.maxliemant.ccdkb.account.model.Account
 import de.maxliemant.ccdkb.account.model.AccountRepository
 import de.maxliemant.ccdkb.account.model.AccountType
+import de.maxliemant.ccdkb.exception.BadRequestException
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
 
@@ -12,9 +13,9 @@ class AccountService(
 ) {
 
     fun getAllAccounts(typeFilters: List<AccountType>): Collection<Account> {
-        val accounts = if (typeFilters.isEmpty()){
+        val accounts = if (typeFilters.isEmpty()) {
             accountRepository.findAll()
-        }else{
+        } else {
             accountRepository.findAllByAccountTypeIn(typeFilters)
         }
         return accounts.toList()
@@ -27,7 +28,10 @@ class AccountService(
     fun saveAccount(account: Account): Account {
         if (account.referenceAccount != null) {
             //reference account must exist
-            getAccount(account.referenceAccount)
+            val referenceAccount = getAccount(account.referenceAccount)
+            if (referenceAccount.accountType != AccountType.CHECKING) {
+                throw BadRequestException("reference account must be a checking account")
+            }
         }
         return accountRepository.save(account)
     }
@@ -37,10 +41,14 @@ class AccountService(
     }
 
     fun lockAccount(iban: String): Account {
-        TODO("Not yet implemented")
+        val account = getAccount(iban)
+        account.locked = true
+        return updateAccount(account)
     }
 
     fun unlockAccount(iban: String): Account {
-        TODO("Not yet implemented")
+        val account = getAccount(iban)
+        account.locked = false
+        return updateAccount(account)
     }
 }

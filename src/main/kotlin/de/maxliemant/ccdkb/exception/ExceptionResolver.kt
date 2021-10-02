@@ -1,5 +1,6 @@
 package de.maxliemant.ccdkb.exception;
 
+import de.maxliemant.ccdkb.common.ResponseWrapper
 import mu.KLogging
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
@@ -21,7 +22,7 @@ class InternalExceptionResolver : ResponseEntityExceptionHandler() {
     @ExceptionHandler(Throwable::class)
     fun handleAllException(ex: Exception, request: WebRequest): ResponseEntity<Any>? {
         //The default handleException method can handle most exceptions. It throws an error if it encounters exceptions it
-        //doesn't recognize, including transaction exceptions.
+        //doesn't recognize.
         try {
             return handleException(ex, request)
         } catch (ex: Exception) {
@@ -32,13 +33,13 @@ class InternalExceptionResolver : ResponseEntityExceptionHandler() {
     @ExceptionHandler(BadRequestException::class)
     fun handleBadRequestException(ex: BadRequestException, request: WebRequest): ResponseEntity<Any> {
         logger.error(ex.message)
-        return handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.BAD_REQUEST, request)
+        return handleExceptionInternal(ex, ResponseWrapper.ofErrors<BadRequestException>(listOf(ex.message ?: "bad request")), HttpHeaders(), HttpStatus.BAD_REQUEST, request)
     }
 
     @ExceptionHandler(EntityNotFoundException::class)
-    fun handleEntityNotFoundException(ex: BadRequestException, request: WebRequest): ResponseEntity<Any> {
+    fun handleEntityNotFoundException(ex: EntityNotFoundException, request: WebRequest): ResponseEntity<Any> {
         logger.error(ex.message)
-        return handleExceptionInternal(ex, ex.message, HttpHeaders(), HttpStatus.NOT_FOUND, request)
+        return handleExceptionInternal(ex, ResponseWrapper.ofErrors<EntityNotFoundException>(listOf(ex.message ?: "not found")), HttpHeaders(), HttpStatus.NOT_FOUND, request)
     }
 
 }
