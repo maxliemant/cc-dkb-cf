@@ -1,7 +1,9 @@
 package de.maxliemant.ccdkb.account.web
 
 import de.maxliemant.ccdkb.account.model.Account
+import de.maxliemant.ccdkb.account.model.AccountType
 import de.maxliemant.ccdkb.account.service.AccountService
+import de.maxliemant.ccdkb.exception.BadRequestException
 import mu.KLogging
 import org.springframework.web.bind.annotation.*
 
@@ -12,9 +14,18 @@ class AccountController(
 ) {
 
     @GetMapping
-    fun getAccounts(): Collection<Account> {
-        logger.info("get all accounts")
-        return accountService.getAllAccounts()
+    fun getAccounts(@RequestParam(required = false) accountType: String?): Collection<Account> {
+        val typeFilters = if(accountType != null){
+            try {
+                val list = accountType.split(",")
+                list.map { AccountType.valueOf(it) }
+            }catch (ex: Exception){
+                throw BadRequestException("Could not parse account type filter. Allowed values are '${AccountType.values().asList().joinToString(", ")}'")
+            }
+        }else {
+            emptyList()
+        }
+        return accountService.getAllAccounts(typeFilters)
     }
 
     @GetMapping("/{iban}")
@@ -23,15 +34,19 @@ class AccountController(
     }
 
     @PostMapping
-    fun createAccount(@RequestBody account: AccountCreateDto): Account {
-        return accountService.saveAccount(account.toAccount())
+    fun createAccount(@RequestBody accountCreateDto: AccountCreateDto): Account {
+        return accountService.saveAccount(accountCreateDto.toAccount())
     }
 
-    @PutMapping
-    fun updateAccount(@RequestBody account: Account): Account {
-        return account
+    @PutMapping("/{iban}/lock")
+    fun lockAccount(@PathVariable("iban") iban: String): Account {
+        return accountService.lockAccount(iban)
     }
 
+    @PutMapping("/{iban}/unlock")
+    fun unlockAccount(@PathVariable("iban") iban: String): Account {
+        return accountService.unlockAccount(iban)
+    }
 
-    companion object: KLogging()
+    companion object : KLogging()
 }

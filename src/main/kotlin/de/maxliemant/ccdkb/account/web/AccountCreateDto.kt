@@ -20,7 +20,7 @@ data class AccountCreateDto(
         return Account(
                 iban = iban,
                 accountOwner = accountOwner,
-                type = type,
+                accountType = type,
                 referenceAccount = referenceAccount,
                 currency = currency,
                 balance = BigDecimal.ZERO
