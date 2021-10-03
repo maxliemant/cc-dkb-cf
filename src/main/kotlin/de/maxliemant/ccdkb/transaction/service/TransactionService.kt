@@ -40,6 +40,12 @@ class TransactionService(val transactionRepository: TransactionRepository,
         return transactionRepository.save(withdraw)
     }
 
+    /**
+     * transfers money from one account to another.
+     * the sending account needs to be not locked.
+     * if the sending account is not a checking account special rules apply.
+     * Saving accounts can only send money to their reference account.
+     */
     @Transactional
     fun transferMoney(transfer: Transaction): Transaction {
         val receiver = accountService.getAccount(transfer.receivingIban!!)
@@ -64,6 +70,9 @@ class TransactionService(val transactionRepository: TransactionRepository,
         return transactionRepository.save(transfer)
     }
 
+    /**
+     * This function throws an error if the currency of the account and the transaction currency doesn't match, as making use of exchange rates is not part of this PoC
+     */
     private fun checkCurrency(account: Account, transaction: Transaction) {
         if (account.currency != transaction.currency) {
             throw BadRequestException("currency of account and transaction doesn't match")

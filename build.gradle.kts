@@ -24,6 +24,8 @@ dependencies {
     implementation("io.github.microutils:kotlin-logging:1.7.7")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testImplementation("org.assertj:assertj-core:3.21.0")
 }
 
 tasks.withType<KotlinCompile> {

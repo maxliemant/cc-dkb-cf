@@ -26,6 +26,8 @@ class AccountService(
     }
 
     fun saveAccount(account: Account): Account {
+        //iban is not verified for validity in this PoC.
+        // it might be an own class including the checksum calculation and countrycodes.
         if (account.referenceAccount != null) {
             //reference account must exist
             val referenceAccount = getAccount(account.referenceAccount)

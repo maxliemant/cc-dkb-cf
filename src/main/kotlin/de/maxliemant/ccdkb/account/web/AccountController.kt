@@ -16,14 +16,14 @@ class AccountController(
 
     @GetMapping
     fun getAccounts(@RequestParam(required = false) accountType: String?): ResponseWrapper<Collection<Account>> {
-        val typeFilters = if(accountType != null){
+        val typeFilters = if (accountType != null) {
             try {
                 val list = accountType.split(",")
                 list.map { AccountType.valueOf(it) }
-            }catch (ex: Exception){
+            } catch (ex: Exception) {
                 throw BadRequestException("Could not parse account type filter. Allowed values are '${AccountType.values().asList().joinToString(", ")}'")
             }
-        }else {
+        } else {
             emptyList()
         }
         return ResponseWrapper.of(accountService.getAllAccounts(typeFilters))

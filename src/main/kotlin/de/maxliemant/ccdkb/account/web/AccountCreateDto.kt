@@ -3,7 +3,6 @@ package de.maxliemant.ccdkb.account.web
 import de.maxliemant.ccdkb.account.model.Account
 import de.maxliemant.ccdkb.account.model.AccountType
 import de.maxliemant.ccdkb.exception.BadRequestException
-import org.springframework.web.client.HttpClientErrorException
 import java.math.BigDecimal
 
 data class AccountCreateDto(
@@ -14,10 +13,10 @@ data class AccountCreateDto(
         val currency: String
 ) {
     fun toAccount(): Account {
-        if(type == AccountType.SAVING && referenceAccount == null){
+        if (type == AccountType.SAVING && referenceAccount == null) {
             throw BadRequestException("'saving' account need a reference account")
         }
-        if(type != AccountType.SAVING && referenceAccount != null){
+        if (type != AccountType.SAVING && referenceAccount != null) {
             throw BadRequestException("only 'saving' account is allowed to have a reference account")
         }
         return Account(

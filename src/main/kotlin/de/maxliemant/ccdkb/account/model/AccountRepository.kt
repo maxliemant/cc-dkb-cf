@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface AccountRepository: CrudRepository<Account, String> {
+interface AccountRepository : CrudRepository<Account, String> {
     fun findAllByAccountTypeIn(types: List<AccountType>): Iterable<Account>
 }
