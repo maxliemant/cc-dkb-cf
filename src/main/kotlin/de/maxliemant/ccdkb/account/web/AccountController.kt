@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/accounts")
 class AccountController(
-        private val accountService: AccountService
+    private val accountService: AccountService
 ) {
 
     @GetMapping

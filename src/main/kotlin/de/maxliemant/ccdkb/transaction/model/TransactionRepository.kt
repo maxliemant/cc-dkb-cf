@@ -7,7 +7,9 @@ import java.util.*
 
 @Repository
 interface TransactionRepository : CrudRepository<Transaction, UUID> {
-    @Query(value = "SELECT * FROM TRANSACTIONS WHERE RECEIVING_IBAN = ?1 or SENDING_IBAN = ?1",
-            nativeQuery = true)
+    @Query(
+        value = "SELECT * FROM TRANSACTIONS WHERE RECEIVING_IBAN = ?1 or SENDING_IBAN = ?1",
+        nativeQuery = true
+    )
     fun findTransactionsByIban(iban: String): List<Transaction>
 }

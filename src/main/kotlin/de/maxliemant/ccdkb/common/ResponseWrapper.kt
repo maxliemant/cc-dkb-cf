@@ -1,8 +1,8 @@
 package de.maxliemant.ccdkb.common
 
 data class ResponseWrapper<T>(
-        val data: T?,
-        val errors: List<String>?
+    val data: T?,
+    val errors: List<String>?
 ) {
 
     companion object {

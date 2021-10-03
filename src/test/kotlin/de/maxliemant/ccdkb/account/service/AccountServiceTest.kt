@@ -69,8 +69,8 @@ class AccountServiceTest {
     inner class CreateAccountTest {
 
         @AfterEach
-        fun afterEach(){
-            if (accountRepository.existsById(createIban)){
+        fun afterEach() {
+            if (accountRepository.existsById(createIban)) {
                 accountRepository.deleteById(createIban)
             }
         }

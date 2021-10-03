@@ -13,7 +13,7 @@ class TransactionController(
 
     @GetMapping("/{iban}")
     fun getTransactionsForIban(@PathVariable("iban") iban: String): ResponseWrapper<Collection<Transaction>> =
-            ResponseWrapper.of(transactionService.findTransactions(iban))
+        ResponseWrapper.of(transactionService.findTransactions(iban))
 
     @PostMapping("/deposit")
     fun depositMoney(@RequestBody transaction: DepositDto): ResponseWrapper<Transaction> {

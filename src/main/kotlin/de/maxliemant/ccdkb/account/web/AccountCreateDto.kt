@@ -6,11 +6,11 @@ import de.maxliemant.ccdkb.exception.BadRequestException
 import java.math.BigDecimal
 
 data class AccountCreateDto(
-        val iban: String,
-        val accountOwner: String,
-        val type: AccountType,
-        val referenceAccount: String?,
-        val currency: String
+    val iban: String,
+    val accountOwner: String,
+    val type: AccountType,
+    val referenceAccount: String?,
+    val currency: String
 ) {
     fun toAccount(): Account {
         if (type == AccountType.SAVING && referenceAccount == null) {
@@ -20,12 +20,12 @@ data class AccountCreateDto(
             throw BadRequestException("only 'saving' account is allowed to have a reference account")
         }
         return Account(
-                iban = iban,
-                accountOwner = accountOwner,
-                accountType = type,
-                referenceAccount = referenceAccount,
-                currency = currency,
-                balance = BigDecimal.ZERO
+            iban = iban,
+            accountOwner = accountOwner,
+            accountType = type,
+            referenceAccount = referenceAccount,
+            currency = currency,
+            balance = BigDecimal.ZERO
         )
     }
 }

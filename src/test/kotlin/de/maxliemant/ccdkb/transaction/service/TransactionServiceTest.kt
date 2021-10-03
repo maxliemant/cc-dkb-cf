@@ -1,7 +1,6 @@
 package de.maxliemant.ccdkb.transaction.service
 
 import de.maxliemant.ccdkb.account.model.Account
-import de.maxliemant.ccdkb.account.model.AccountRepository
 import de.maxliemant.ccdkb.account.model.AccountType
 import de.maxliemant.ccdkb.account.service.AccountService
 import de.maxliemant.ccdkb.exception.BadRequestException
@@ -39,7 +38,7 @@ class TransactionServiceTest {
     inner class GetTransactionsTest {
 
         @Test
-        fun getAllTransactionsForAccount(){
+        fun getAllTransactionsForAccount() {
             val checkingAccount = accountService.getAccount(checkingIban)
 
             val transactions = transactionService.findTransactions(checkingIban)
@@ -53,7 +52,7 @@ class TransactionServiceTest {
     inner class TransferMoneyTest {
 
         @Test
-        fun transferMoneyFromSavingToCheckingAccount(){
+        fun transferMoneyFromSavingToCheckingAccount() {
             val checkingAccount = accountService.getAccount(checkingIban)
             val savingAccount = accountService.getAccount(savingIban)
 
@@ -74,17 +73,17 @@ class TransactionServiceTest {
         }
 
         @Test
-        fun doNotTransferMoneyToOtherThanReferenceAccountForSaving(){
+        fun doNotTransferMoneyToOtherThanReferenceAccountForSaving() {
             val savingAccount = accountService.getAccount(savingIban)
 
             val transaction = TransferDto(
-                    privateLoanIban,
-                    savingIban,
-                    "10.00",
-                    savingAccount.currency
+                privateLoanIban,
+                savingIban,
+                "10.00",
+                savingAccount.currency
             ).toTransaction()
 
-            assertThrows<BadRequestException> {  transactionService.transferMoney(transaction) }
+            assertThrows<BadRequestException> { transactionService.transferMoney(transaction) }
 
             val updatedSaving = accountService.getAccount(savingIban)
 
@@ -92,7 +91,7 @@ class TransactionServiceTest {
         }
 
         @Test
-        fun doNotTransferMoneyForLockedAccount(){
+        fun doNotTransferMoneyForLockedAccount() {
             val lockedAccount = accountService.getAccount(lockedIban)
             val checkingAccount = accountService.getAccount(checkingIban)
 
@@ -103,7 +102,7 @@ class TransactionServiceTest {
                 currency = lockedAccount.currency
             ).toTransaction()
 
-            assertThrows<BadRequestException> {  transactionService.transferMoney(transaction) }
+            assertThrows<BadRequestException> { transactionService.transferMoney(transaction) }
 
             val updatedLocked = accountService.getAccount(lockedIban)
 
@@ -111,7 +110,7 @@ class TransactionServiceTest {
         }
 
         @Test
-        fun canNotTransferMoneyHigherThanBalance(){
+        fun canNotTransferMoneyHigherThanBalance() {
             val checkingAccount = accountService.getAccount(checkingIban)
             val savingAccount = accountService.getAccount(savingIban)
 
@@ -132,7 +131,7 @@ class TransactionServiceTest {
         }
 
         @Test
-        fun canNotTransferMoneyToSameAccount(){
+        fun canNotTransferMoneyToSameAccount() {
             val transaction = TransferDto(
                 receivingIban = checkingIban,
                 sendingIban = checkingIban,
@@ -146,7 +145,7 @@ class TransactionServiceTest {
         }
 
         @Test
-        fun receivingIbanNeedToBeNotNull(){
+        fun receivingIbanNeedToBeNotNull() {
             val transaction = TransferDto(
                 receivingIban = null,
                 sendingIban = checkingIban,
@@ -158,8 +157,9 @@ class TransactionServiceTest {
                 transactionService.transferMoney(transaction)
             }
         }
+
         @Test
-        fun sendingIbanNeedToBeNotNull(){
+        fun sendingIbanNeedToBeNotNull() {
             val transaction = TransferDto(
                 receivingIban = checkingIban,
                 sendingIban = null,
@@ -178,7 +178,7 @@ class TransactionServiceTest {
     inner class WithdrawMoneyTest {
 
         @Test
-        fun withdrawMoneyFromCheckingAccount(){
+        fun withdrawMoneyFromCheckingAccount() {
             val checkingAccount = accountService.getAccount(checkingIban)
 
             val transaction = WithdrawDto(
@@ -195,7 +195,7 @@ class TransactionServiceTest {
         }
 
         @Test
-        fun doNotWithdrawMoneyFromSavingAccount(){
+        fun doNotWithdrawMoneyFromSavingAccount() {
             val savingAccount = accountService.getAccount(savingIban)
 
             val transaction = WithdrawDto(
@@ -214,7 +214,7 @@ class TransactionServiceTest {
         }
 
         @Test
-        fun canNotWithdrawMoneyHigherThanBalance(){
+        fun canNotWithdrawMoneyHigherThanBalance() {
             val checkingAccount = accountService.getAccount(checkingIban)
 
             val transaction = WithdrawDto(
@@ -238,7 +238,7 @@ class TransactionServiceTest {
     inner class DepositMoneyTest {
 
         @Test
-        fun depositMoneyFromCheckingAccount(){
+        fun depositMoneyFromCheckingAccount() {
             val checkingAccount = accountService.getAccount(checkingIban)
 
             val transaction = DepositDto(

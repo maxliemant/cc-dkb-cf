@@ -7,55 +7,55 @@ import java.math.BigDecimal
 
 
 data class DepositDto(
-        val iban: String,
-        val amount: String,
-        val currency: String,
+    val iban: String,
+    val amount: String,
+    val currency: String,
 ) {
     fun toTransaction(): Transaction {
         val depositAmount = BigDecimal(amount)
         checkAmountNotNegativeOrZero(depositAmount)
         return Transaction(
-                receivingIban = iban,
-                currency = currency,
-                amount = depositAmount,
-                transactionType = TransactionType.DEPOSIT
+            receivingIban = iban,
+            currency = currency,
+            amount = depositAmount,
+            transactionType = TransactionType.DEPOSIT
         )
     }
 }
 
 data class WithdrawDto(
-        val iban: String,
-        val amount: String,
-        val currency: String,
+    val iban: String,
+    val amount: String,
+    val currency: String,
 ) {
     fun toTransaction(): Transaction {
         val withdrawAmount = BigDecimal(amount)
         checkAmountNotNegativeOrZero(withdrawAmount)
         return Transaction(
-                sendingIban = iban,
-                currency = currency,
-                amount = withdrawAmount,
-                transactionType = TransactionType.WITHDRAW
+            sendingIban = iban,
+            currency = currency,
+            amount = withdrawAmount,
+            transactionType = TransactionType.WITHDRAW
         )
     }
 }
 
 data class TransferDto(
-        val receivingIban: String?,
-        val sendingIban: String?,
-        val amount: String,
-        val currency: String,
+    val receivingIban: String?,
+    val sendingIban: String?,
+    val amount: String,
+    val currency: String,
 ) {
 
     fun toTransaction(): Transaction {
         val transferAmount = BigDecimal(amount)
         checkAmountNotNegativeOrZero(transferAmount)
         return Transaction(
-                receivingIban = receivingIban,
-                sendingIban = sendingIban,
-                currency = currency,
-                amount = transferAmount,
-                transactionType = TransactionType.TRANSFER
+            receivingIban = receivingIban,
+            sendingIban = sendingIban,
+            currency = currency,
+            amount = transferAmount,
+            transactionType = TransactionType.TRANSFER
         )
     }
 
