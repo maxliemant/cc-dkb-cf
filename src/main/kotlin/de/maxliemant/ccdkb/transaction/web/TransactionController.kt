@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/transactions")
 class TransactionController(
-        val transactionService: TransactionService
+    private val transactionService: TransactionService
 ) {
 
     @GetMapping("/{iban}")

@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class TransactionService(val transactionRepository: TransactionRepository,
-                         val accountService: AccountService) {
+class TransactionService(
+    private val transactionRepository: TransactionRepository,
+    private val accountService: AccountService
+) {
 
     fun findTransactions(iban: String): Collection<Transaction> {
         return transactionRepository.findTransactionsByIban(iban)
@@ -48,8 +50,14 @@ class TransactionService(val transactionRepository: TransactionRepository,
      */
     @Transactional
     fun transferMoney(transfer: Transaction): Transaction {
-        val receiver = accountService.getAccount(transfer.receivingIban!!)
-        val sender = accountService.getAccount(transfer.sendingIban!!)
+        if (transfer.receivingIban == null || transfer.sendingIban == null) {
+            throw BadRequestException("both ibans need to be not null")
+        }
+        if (transfer.receivingIban == transfer.sendingIban) {
+            throw BadRequestException("ibans cannot be identical")
+        }
+        val receiver = accountService.getAccount(transfer.receivingIban)
+        val sender = accountService.getAccount(transfer.sendingIban)
         if (sender.accountType == AccountType.PRIVATE_LOAN) {
             throw BadRequestException("account is not allowed for transferring money")
         }

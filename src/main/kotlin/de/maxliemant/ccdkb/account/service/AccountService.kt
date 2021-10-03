@@ -9,7 +9,7 @@ import javax.persistence.EntityNotFoundException
 
 @Service
 class AccountService(
-        val accountRepository: AccountRepository
+    private val accountRepository: AccountRepository
 ) {
 
     fun getAllAccounts(typeFilters: List<AccountType>): Collection<Account> {

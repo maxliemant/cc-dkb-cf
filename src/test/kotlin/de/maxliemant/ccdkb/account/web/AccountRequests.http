@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "iban": "DE63120300001234123435",
-  "accountOwner": "Max Liemant",
+  "accountOwner": "Bruce Wayne",
   "type": "SAVING",
   "referenceAccount": "DE23120300001234123412",
   "currency": "EUR"
